@@ -13,9 +13,9 @@
 #
 #  You should have received a copy of the GNU Lesser General Public
 #  License along with this library.
+from octobot.community.community_manager import CommunityManager
 from octobot_backtesting.api.backtesting import is_backtesting_enabled
 from octobot_tentacles_manager.api.configurator import get_tentacles_setup_config
-from octobot.community.community_manager import CommunityManager
 
 
 class Initializer:
@@ -29,9 +29,6 @@ class Initializer:
     async def create(self):
         # initialize tentacle configuration
         self.octobot.tentacles_setup_config = get_tentacles_setup_config()
-        # initialize tools
-        self._init_community()
 
-    def _init_community(self):
-        if not is_backtesting_enabled(self.octobot.config):
-            self.octobot.community_handler = CommunityManager(self.octobot.octobot_api)
+        # create OctoBot channel
+        await self.octobot.global_consumer.initialize()
